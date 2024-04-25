@@ -10,7 +10,7 @@ namespace iBurguer.Menu.Infrastructure.Swagger;
 public static class SwaggerHostApplicationExtensions
 {
     private const string Title = "iBurguer Menu API";
-    private const string Description = "API destinada ao subdomínio Gestão de Cardápio";
+    private const string Description = "The Digital Menu Management API provides a comprehensive solution for managing the digital menu of iBurguer. This RESTful API empowers restaurant owners and administrators to effortlessly update, organize, and customize their menu offerings in real-time, ensuring an engaging and dynamic experience for customers.";
     private const string Version = "v1";
     
     public static IHostApplicationBuilder AddSwagger(this IHostApplicationBuilder builder)
