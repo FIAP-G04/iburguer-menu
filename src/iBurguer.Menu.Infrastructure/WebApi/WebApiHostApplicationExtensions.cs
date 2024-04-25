@@ -17,6 +17,17 @@ public static class WebApiHostApplicationExtensions
         builder.Services.AddControllers();
         builder.AddSwagger();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowCredentials()
+                    .AllowAnyHeader();
+            });
+        });
+
         return builder;
     }
     
