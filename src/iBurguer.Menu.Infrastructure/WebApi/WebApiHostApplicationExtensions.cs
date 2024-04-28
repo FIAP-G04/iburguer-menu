@@ -12,16 +12,7 @@ public static class WebApiHostApplicationExtensions
     {
         builder.Services.AddControllers();
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-        builder.Services.AddProblemDetails(options =>
-            options.CustomizeProblemDetails = (context) =>
-            {
-                if (!context.ProblemDetails.Extensions.ContainsKey("traceId"))
-                { 
-                    string? traceId = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
-                    context.ProblemDetails.Extensions.Add(new KeyValuePair<string, object?>("traceId", traceId));
-                }
-            }
-        );
+        builder.Services.AddProblemDetails();
         builder.AddSwagger();
 
         builder.Services.AddCors(options =>
