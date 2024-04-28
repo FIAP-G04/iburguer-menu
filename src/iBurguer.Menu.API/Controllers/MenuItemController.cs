@@ -21,7 +21,7 @@ public class MenuItemController : ControllerBase
     /// </summary>
     /// <remarks>Returns a list of items in the specified category.</remarks>
     /// <param name="useCase">The use case responsible for retrieving categorized menu items.</param>
-    /// <param name="category">The category of menu items to retrieve.</param>
+    /// <param name="category" example="Dessert">The category of menu items to retrieve.</param>
     /// <param name="cancellationToken">Cancellation token (optional).</param>
     /// <response code="200">Successful operation. Returns a list of items.</response>
     /// <response code="400">Invalid request. Missing or invalid parameters.</response>
