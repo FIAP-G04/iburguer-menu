@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
+using iBurguer.Menu.Core.UseCases.AddMenuItem;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace iBurguer.Menu.Infrastructure.Swagger;
 
@@ -15,6 +17,8 @@ public static class SwaggerHostApplicationExtensions
     
     public static IHostApplicationBuilder AddSwagger(this IHostApplicationBuilder builder)
     {
+        builder.Services.AddSwaggerExamplesFromAssemblyOf(typeof(AddMenuItemRequest));
+        
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc(Version, new OpenApiInfo
@@ -23,7 +27,8 @@ public static class SwaggerHostApplicationExtensions
                 Description = Description, 
                 Version = Version
             });
-            
+
+            options.ExampleFilters();
             options.EnableAnnotations();
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "iBurguer.Menu.API.xml"));
             options.DescribeAllParametersInCamelCase();

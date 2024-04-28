@@ -6,6 +6,8 @@ using iBurguer.Menu.Infrastructure.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+
 builder.AddWebApi()
        .AddMongoDb()
        .AddRepositories()
