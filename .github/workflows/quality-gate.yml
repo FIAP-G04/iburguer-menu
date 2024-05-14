@@ -14,10 +14,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -37,10 +37,6 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Install Coverlet
-        shell: powershell
-        run: |
-          dotnet tool install --global coverlet.console
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,14 +45,8 @@ jobs:
           PROJECT_NAME: iBurguer.Menu.API
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io"      
-          dotnet build ${{ env.ROOT_PROJECT_DIRECTORY}}/${{ env.PROJECT_NAME}} --no-incremental 
-          echo 1************************************************************************************   
-          coverlet .\iBurguer.Menu.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"     
-          echo 2************************************************************************************   
-          coverlet .\test\iBurguer.Menu.UnitTests\bin\Debug\net8.0\iBurguer.Menu.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"
-          echo 3************************************************************************************
-          ls .\test\iBurguer.Menu.UnitTests\bin\Debug\net8.0
-          ls  D:\a\iburguer-menu\iburguer-menu\test\iBurguer.Menu.UnitTests\bin\Debug\net8.0
-          echo 4************************************************************************************ 
+          dotnet tool install --global dotnet-sonarscanner       
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.token="${{ secrets.SONAR_TOKEN }}"      
+          dotnet build --configuration Release
+          dotnet test --no-build --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
