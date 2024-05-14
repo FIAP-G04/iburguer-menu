@@ -38,18 +38,19 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Install Coverlet
+        uses: actions/cache@v3
         shell: powershell
         run: |
           dotnet tool install --global coverlet.console
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ROOT_PROJECT_DIRECTORY: src
           PROJECT_NAME: iBurguer.Menu.API
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=coverage.xml         
-          dotnet build ${{ env.ROOT_PROJECT_DIRECTORY}}/${{ env.PROJECT_NAME}} --no-incremental --configuration Release         
-          coverlet .\iBurguer.Menu.UnitTests\bin\Debug\net8.0\iBurguer.Menu.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"          
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io"      
+          dotnet build ${{ env.ROOT_PROJECT_DIRECTORY}}/${{ env.PROJECT_NAME}} --no-incremental     
+          coverlet .\test\iBurguer.Menu.UnitTests\bin\Debug\net8.0\iBurguer.Menu.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"          
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
