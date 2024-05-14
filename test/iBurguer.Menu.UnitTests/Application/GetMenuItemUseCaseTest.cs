@@ -1,66 +1,46 @@
 ﻿using FluentAssertions;
 using iBurguer.Menu.Core.Domain;
-using iBurguer.Menu.Core.UseCases.MenuItemsByCategory;
+using iBurguer.Menu.Core.UseCases.GetMenuItem;
 using NSubstitute;
 
-namespace iBurguer.Menu.UnitTests.Application
+namespace iBurguer.Menu.UnitTests.Application;
+
+public class GetMenuItemUseCaseTest
 {
-    public class GetMenuItemUseCaseTest
+    private readonly IMenuRepository _repository;
+
+    private readonly GetMenuItemUseCase _manipulator;
+
+    public GetMenuItemUseCaseTest()
     {
-        private readonly IMenuRepository _repository;
+        _repository = Substitute.For<IMenuRepository>();
 
-        private readonly GetCategorizedMenuItemsUseCase _manipulator;
-
-        public GetMenuItemUseCaseTest()
-        {
-            _repository = Substitute.For<IMenuRepository>();
-
-            _manipulator = new(_repository);
-        }
-
-        [Fact] 
-        public async Task ShouldGetItemsByCategory()
-        {
-            var category = "Drink";
-            
-            var items = new List<Item>()
-            {
-                new(
-                    "Item name 1", "item description 1",
-                    new(10), Category.Drink, 10,
-                    new List<Url> {
-                        new("http://image.old.com.br")
-                    }),
-                new(
-                    "Item name 2", "item description 2",
-                    new(10), Category.Drink, 10,
-                    new List<Url> {
-                        new("http://image.old.com.br")
-                    }),
-                new(
-                    "Item name 3", "item description 3",
-                    new(10), Category.Drink, 10,
-                    new List<Url> {
-                        new("http://image.old.com.br")
-                    }),
-            };
-
-            _repository.GetMenuItemsByCategory(Category.FromName(category), Arg.Any<CancellationToken>())
-                .Returns(items);
-
-            var result = await _manipulator.GetItemsByCategory(category, default);
-
-            result.Should().NotBeNullOrEmpty();
-
-            foreach(var item in items)
-            {
-                result
-                    .Should()
-                    .Contain(r => 
-                        r.Id == item.Id && 
-                        r.Category == item.Category.ToString() 
-                        && r.Category == category);
-            }
-        }
+        _manipulator = new(_repository);
     }
+
+    [Fact]
+    public async Task ShouldGetItemsById()
+    {
+        var id = Guid.NewGuid();
+
+        var item = new Item("Item name 1", "item description 1",
+                new(10), Category.Drink, 10,
+                [
+                    new("http://image.old.com.br")
+                ]);
+
+        _repository.GetMenuItemById(id, Arg.Any<CancellationToken>())
+            .Returns(item);
+
+        var result = await _manipulator.GetMenuItemById(id, default);
+
+        result.Should().NotBeNull();
+        result.Category.Should().Be(item.Category.ToString());
+        result.Description.Should().Be(item.Description);
+        result.Name.Should().Be(item.Name);
+        result.PreparationTime.Should().Be(item.PreparationTime);
+        result.Price.Should().Be(item.Price);
+
+    }
+
 }

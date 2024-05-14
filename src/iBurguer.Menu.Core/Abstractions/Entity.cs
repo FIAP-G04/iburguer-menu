@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace iBurguer.Menu.Core.Abstractions;
 
+[ExcludeFromCodeCoverage]
 public abstract class Entity<TId> : IEntity
     where TId : class
 {
@@ -17,7 +20,7 @@ public abstract class Entity<TId> : IEntity
         {
             events = new List<IDomainEvent>();
         }
-        
+
         events.Add(domainEvent);
     }
 
