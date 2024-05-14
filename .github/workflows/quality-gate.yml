@@ -46,7 +46,7 @@ jobs:
         shell: powershell
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          dotnet build ${{ env.ROOT_PROJECT_DIRECTORY}}/${{ env.PROJECT_NAME}}
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
+          dotnet build --configuration Release
           dotnet test --no-build --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
