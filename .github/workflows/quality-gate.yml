@@ -37,12 +37,57 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Build and analyze
+      
+      - name: Build and analyze 1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
           dotnet build --configuration Release
           dotnet test --no-build --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      
+      - name: Build and analyze 2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          SonarScanner.MSBuild.exe begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet build --no-incremental
+          dotnet test --collect "Code Coverage"
+          SonarScanner.MSBuild.exe end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      
+      - name: Build and analyze 3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          dotnet tool install --global dotnet-coverage
+          dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet build --no-incremental
+          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      
+      - name: Build and analyze 4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          dotnet tool install --global JetBrains.dotCover.GlobalTool
+          dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
+          dotnet build -no-incremental
+          dotnet dotcover test --dcReportType=HTML
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        
+      - name: Build and analyze 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          dotnet tool install --global coverlet.console
+          dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=coverage.xml
+          dotnet build --no-incremental
+          coverlet .\iBurguer.Menu.UnitTests\bin\Debug\net8.0\iBurguer.Menu.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          
