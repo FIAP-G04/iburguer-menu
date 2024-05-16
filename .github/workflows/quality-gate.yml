@@ -1,62 +1,42 @@
-name: SonarCloud
+name: SonarCloud Analysis
 on:
   push:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+        types: [opened, synchronize, reopened]
 jobs:
   build:
     name: Build and Analyze
     runs-on: ubuntu-latest
-    steps:    
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_PROJECT_KEY: your-project-key
+      SONAR_ORGANIZATION: your-organization-key
+
+    steps:
       - name: Checkout repository
-        uses: actions/checkout@v3        
-      
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'zulu'
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar        
-      
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v3
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner          
-      
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner     
-      
+        uses: actions/checkout@v3
+
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x'
-          
+          dotnet-version: '8.x' # Adjust to your target .NET version
+
       - name: Install dependencies
         run: dotnet restore
-  
+
       - name: Build the project
         run: dotnet build --no-restore
 
       - name: Run tests with coverage
         run: dotnet test --no-build --collect:"XPlat Code Coverage"
+
+      - name: Install SonarCloud scanner
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
       - name: Report coverage to SonarCloud
         run: |
