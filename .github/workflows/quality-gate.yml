@@ -33,9 +33,7 @@ jobs:
         run: dotnet test --no-build --collect:"XPlat Code Coverage"
 
       - name: Install SonarCloud scanner
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+        run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Report coverage to SonarCloud
         run: |
