@@ -48,7 +48,6 @@ jobs:
           dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="coveragereport/SonarQube.xml"
           dotnet build
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
       - name: Publish test results
         if: always()
         uses: actions/upload-artifact@v3
