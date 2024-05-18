@@ -47,3 +47,4 @@ jobs:
           dotnet build --configuration Release
           dotnet test --no-build --configuration Release
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          
