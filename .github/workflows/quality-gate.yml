@@ -109,4 +109,4 @@ jobs:
 
       - name: Deploy to EKS
         run: |
-          kubectl apply --validate=false -f FIAP/k8s/artifacts.yaml
+          kubectl apply --validate=false -f k8s/artifacts.yaml
