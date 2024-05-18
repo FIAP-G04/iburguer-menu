@@ -30,7 +30,7 @@ jobs:
       - name: Report code coverage to SonarCloud
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"YOUR_SONAR_PROJECT_KEY" /o:"YOUR_SONAR_ORG" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"  /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
           dotnet build --no-restore
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           
