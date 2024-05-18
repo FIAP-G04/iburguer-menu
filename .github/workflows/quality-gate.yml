@@ -55,7 +55,7 @@ jobs:
             
           dotnet build --no-incremental
           
-          dotnet test --no-build --logger "trx;LogFileName=test_results.trx" --results-directory "test_results" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="test_results/coverage.opencover.xml"
+          dotnet test --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="test_results/coverage.opencover.xml"
           
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
