@@ -1,6 +1,5 @@
 using iBurguer.Menu.Core.Domain;
 using iBurguer.Menu.Core.UseCases.MenuItemsByCategory;
-using static iBurguer.Menu.Core.Exceptions;
 
 namespace iBurguer.Menu.Core.UseCases.GetMenuItem;
 
@@ -28,7 +27,7 @@ public class GetMenuItemUseCase : IGetMenuItemUseCase
         {
             return MenuItemResponse.Convert(item);
         }
-        
+
         return null;
     }
 }
