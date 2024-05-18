@@ -50,8 +50,8 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.cs.xunit.reportsPaths="**\coverage.cobertura.xml" /d:sonar.cs.opencover.reportsPaths=coverage.xml
           
-          dotnet build --configuration Release
+          dotnet build
           
-          dotnet test --no-build --collect:"XPlat Code Coverage";
+          dotnet test --collect:"XPlat Code Coverage";
           
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
