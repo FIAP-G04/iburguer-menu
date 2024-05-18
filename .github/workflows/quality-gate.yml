@@ -21,19 +21,6 @@ jobs:
       - name: install Coverlet
         run: |
           dotnet tool install --global coverlet.console
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v3
-        with:
-          path: .
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
       - name: Install SonarCloud scanner
         run: |
           dotnet tool install --global dotnet-sonarscanner
