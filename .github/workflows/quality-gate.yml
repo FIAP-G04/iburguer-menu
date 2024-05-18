@@ -18,6 +18,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: install Coverlet
+        run: |
+          dotnet tool install --global coverlet.console
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -44,8 +47,15 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build --configuration Release
-          dotnet test --no-build --configuration Release
+          
+          dotnet sonarscanner begin /k:"FIAP-G04_iburguer-menu" /o:"fiap-g04" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=coverage.xml
+          
+          dotnet build --no-incremental
+          
+          coverlet  .\test\iBurguer.Menu.UnitTests\bin\Debug\net8.0\iBurguer.Menu.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"
+          
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   deploy:
