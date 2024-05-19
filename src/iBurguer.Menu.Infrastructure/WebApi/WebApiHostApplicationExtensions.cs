@@ -1,11 +1,12 @@
-using System.Diagnostics;
 using iBurguer.Menu.Infrastructure.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace iBurguer.Menu.Infrastructure.WebApi;
 
+[ExcludeFromCodeCoverage]
 public static class WebApiHostApplicationExtensions
 {
     public static IHostApplicationBuilder AddWebApi(this IHostApplicationBuilder builder)
@@ -28,7 +29,7 @@ public static class WebApiHostApplicationExtensions
 
         return builder;
     }
-    
+
     public static WebApplication UseWebApi(this WebApplication app)
     {
         app.ConfigureSwagger();

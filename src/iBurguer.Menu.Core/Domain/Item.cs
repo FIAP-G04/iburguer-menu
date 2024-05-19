@@ -31,7 +31,7 @@ public class Item : Entity<Id>, IAggregateRoot
             _price = value;
         }
     }
-    
+
     public IReadOnlyCollection<Url> Images
     {
         get => _images.AsReadOnly();
@@ -70,12 +70,11 @@ public class Item : Entity<Id>, IAggregateRoot
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
-
     #endregion Constructors
 
 
     #region Methods
-    
+
     public void Update(string name, string description, Price price, Category category,
         ushort preparationTime, IEnumerable<Url> images)
     {

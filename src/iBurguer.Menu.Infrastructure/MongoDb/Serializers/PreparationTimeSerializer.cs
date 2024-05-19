@@ -1,12 +1,14 @@
 using iBurguer.Menu.Core.Domain;
 using MongoDB.Bson.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace iBurguer.Menu.Infrastructure.MongoDB.Serializers;
 
+[ExcludeFromCodeCoverage]
 public class PreparationTimeSerializer : IBsonSerializer<PreparationTime>
 {
     public Type ValueType => typeof(PreparationTime);
-    
+
     public PreparationTime Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var value = context.Reader.ReadInt32();
