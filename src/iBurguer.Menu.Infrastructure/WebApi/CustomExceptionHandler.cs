@@ -1,12 +1,14 @@
-using System.Diagnostics;
-using static iBurguer.Menu.Core.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using static iBurguer.Menu.Core.Exceptions;
 
 namespace iBurguer.Menu.Infrastructure.WebApi;
 
+[ExcludeFromCodeCoverage]
 public sealed class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
@@ -24,9 +26,9 @@ public sealed class CustomExceptionHandler(ILogger<CustomExceptionHandler> logge
             Status = statusCode,
             Instance = httpContext.Request.Path
         };
-        
+
         problemDetails.Extensions.Add(new KeyValuePair<string, object?>("traceId", Activity.Current?.Id ?? httpContext.TraceIdentifier));
-        
+
         httpContext.Response.StatusCode = statusCode;
 
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);

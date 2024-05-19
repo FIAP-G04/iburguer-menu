@@ -1,12 +1,14 @@
 using iBurguer.Menu.Core.Domain;
 using MongoDB.Bson.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace iBurguer.Menu.Infrastructure.MongoDB.Serializers;
 
+[ExcludeFromCodeCoverage]
 public class UrlSerializer : IBsonSerializer<Url>
 {
     public Type ValueType => typeof(Url);
-    
+
     public Url Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var value = context.Reader.ReadString();

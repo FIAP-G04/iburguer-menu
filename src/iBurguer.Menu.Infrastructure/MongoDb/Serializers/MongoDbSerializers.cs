@@ -1,9 +1,11 @@
 using iBurguer.Menu.Infrastructure.MongoDB.Serializers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace iBurguer.Menu.Infrastructure.MongoDb.Serializers;
 
+[ExcludeFromCodeCoverage]
 public static class MongoDbSerializers
 {
     public static void Register()

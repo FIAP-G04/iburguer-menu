@@ -1,12 +1,14 @@
 using iBurguer.Menu.Core.Domain;
 using MongoDB.Bson.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace iBurguer.Menu.Infrastructure.MongoDB.Serializers;
 
+[ExcludeFromCodeCoverage]
 public class PriceSerializer : IBsonSerializer<Price>
 {
     public Type ValueType => typeof(Price);
-    
+
     public Price Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var value = Convert.ToDecimal(context.Reader.ReadDouble());

@@ -1,12 +1,14 @@
 using iBurguer.Menu.Core.Domain;
 using MongoDB.Bson.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace iBurguer.Menu.Infrastructure.MongoDB.Serializers;
 
+[ExcludeFromCodeCoverage]
 public class CategorySerializer : IBsonSerializer<Category>
 {
     public Type ValueType => typeof(Category);
-    
+
     public Category Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var value = context.Reader.ReadInt32();
