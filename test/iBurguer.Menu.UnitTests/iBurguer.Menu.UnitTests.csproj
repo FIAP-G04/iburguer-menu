@@ -19,7 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\iBurguer.Menu.API\iBurguer.Menu.API.csproj" />
       <ProjectReference Include="..\..\src\iBurguer.Menu.Core\iBurguer.Menu.Core.csproj" />
+      <ProjectReference Include="..\..\src\iBurguer.Menu.Infrastructure\iBurguer.Menu.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
