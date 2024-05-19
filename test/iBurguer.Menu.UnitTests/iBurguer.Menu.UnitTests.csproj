@@ -30,10 +30,13 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\iBurguer.Menu.Core\iBurguer.Menu.Core.csproj" />
+	  <ProjectReference Include="..\..\src\iBurguer.Menu.Infrastructure\iBurguer.Menu.Infrastructure.csproj"  />
+	  <ProjectReference Include="..\..\src\iBurguer.Menu.API\iBurguer.Menu.API.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="Xunit" />
     </ItemGroup>
+
 
 </Project>
